@@ -111,9 +111,6 @@ public:
                 }
                 for (int i = 0; i < coleccion_tiburon.size(); i++) {
                     coleccion_tiburon[i]->pintaTiburon();
-                    int posX = coleccion_tiburon[i]->getX();
-                    int posY = coleccion_tiburon[i]->getY();
-                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer)) player.reset();
                 }
                 
                 cout << player;
