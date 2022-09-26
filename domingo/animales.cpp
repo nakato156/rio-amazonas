@@ -12,12 +12,17 @@ class Amazonas {
 protected:
     int x, y;
     int velocidad;
-    int posicionX = 0, posicionY = 0;
     int avanza = 1 ? rand() % 2 : -1;
-
+    
 public:
-    Amazonas() {}
-    ~Amazonas() {}
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
+
 
 };
 

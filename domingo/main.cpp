@@ -3,6 +3,7 @@
 #include <iostream>
 #include <conio.h>
 #include <thread>
+#include <vector>
 
 #define WIDTH_CONSOLE 100
 #define HEIGHT_CONSOLE 24
@@ -20,6 +21,17 @@ private:
     int color = 2;
     int posicionX = 49, posicionY = 23;
 public:
+    int getX() {
+        return posicionX;
+    }
+    int getY() {
+        return posicionY;
+    }
+    void reset() {
+        Console::SetCursorPosition(posicionX, posicionY);
+        cout << " ";
+        Console::SetCursorPosition(49, 23);
+    }
     void mover(int x, int y) {
         if (posicionX + x < 0 || posicionY + y < 0) return;
         else if (posicionX + x > WIDTH_CONSOLE || posicionY + y > HEIGHT_CONSOLE) return;
@@ -46,8 +58,6 @@ public:
 class Game {
 public:
     void init() {
-        // Se inician los hilos de los animales
-
         // se crea al nadador
         Nadador player;
         cout << player << endl;
@@ -56,35 +66,57 @@ public:
         Boa* boa = new Boa();
         Tiburon* tiburon = new Tiburon();
 
-        Arreglo <Cocodrilo> coleccion_cocodrilo;
-        Arreglo <Boa> coleccion_boa;
-        Arreglo <Tiburon> coleccion_tiburon;
+        vector <Cocodrilo*> coleccion_cocodrilo;
+        vector <Boa*> coleccion_boa;
+        vector <Tiburon*> coleccion_tiburon;
+
+        int posXPlayer, posYPlayer;
 
         while (true)
         {
             if (kbhit()) {
                 char tecla = getch();
+                
                 if (tecla == AVANZAR) player.mover(1, 0);
                 else if (tecla == RETROCEDER) player.mover(-1, 0);
                 else if (tecla == ARRIBA) player.mover(0, -1);
                 else if (tecla == ABAJO) player.mover(0, 1);
+                
+                // creacion de animales
                 else if (tecla == 't') {
-                    coleccion_tiburon.append(new Tiburon());
+                    coleccion_tiburon.push_back(new Tiburon());
                 }
                 else if (tecla == 'c') {
-                    coleccion_cocodrilo.append(new Cocodrilo());
+                    coleccion_cocodrilo.push_back(new Cocodrilo());
                 }
                 else if (tecla == 'b') {
-                    coleccion_boa.append(new Boa());
+                    coleccion_boa.push_back(new Boa());
                 }
 
-                for (int i = 0; i < coleccion_cocodrilo.length; i++) coleccion_cocodrilo[i]->crearCocodrilo();
-                for (int i = 0; i < coleccion_boa.length; i++) coleccion_boa[i]->creaBoa();
-                for (int i = 0; i < coleccion_tiburon.length; i++) coleccion_tiburon[i]->pintaTiburon();
+                posXPlayer = player.getX();
+                posYPlayer = player.getY();
+
+                // verificando colisiones
+                for (int i = 0; i < coleccion_cocodrilo.size(); i++) {
+                    coleccion_cocodrilo[i]->crearCocodrilo();
+                    int posX = coleccion_cocodrilo[i]->getX();
+                    int posY = coleccion_cocodrilo[i]->getY();
+                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer) ) player.reset();
+                }
+                for (int i = 0; i < coleccion_boa.size(); i++) {
+                    coleccion_boa[i]->creaBoa();
+                    int posX = coleccion_boa[i]->getX();
+                    int posY = coleccion_boa[i]->getY();
+                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer)) player.reset();
+                }
+                for (int i = 0; i < coleccion_tiburon.size(); i++) {
+                    coleccion_tiburon[i]->pintaTiburon();
+                    int posX = coleccion_tiburon[i]->getX();
+                    int posY = coleccion_tiburon[i]->getY();
+                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer)) player.reset();
+                }
                 
                 cout << player;
-
-                // comprobar colision
             }
             _sleep(100);
         }
