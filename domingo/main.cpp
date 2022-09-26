@@ -1,5 +1,10 @@
 ﻿#include "pch.h"
 #include "animales.cpp"
+/*
+#include "Boa.h"
+#include "Cocodrilo.h"
+#include "Tiburon.h"
+*/
 #include <iostream>
 #include <conio.h>
 #include <thread>
@@ -29,8 +34,11 @@ public:
     }
     void reset() {
         Console::SetCursorPosition(posicionX, posicionY);
-        cout << " ";
-        Console::SetCursorPosition(49, 23);
+        cout << "  ";
+        posicionX = 49;
+        posicionY = 23;
+        Console::SetCursorPosition(posicionX, posicionY);
+        cout << repr;
     }
     void mover(int x, int y) {
         if (posicionX + x < 0 || posicionY + y < 0) return;
@@ -99,15 +107,31 @@ public:
                 // verificando colisiones
                 for (int i = 0; i < coleccion_cocodrilo.size(); i++) {
                     coleccion_cocodrilo[i]->crearCocodrilo();
+                    if (!coleccion_cocodrilo[i]->dibujar) continue;
                     int posX = coleccion_cocodrilo[i]->getX();
                     int posY = coleccion_cocodrilo[i]->getY();
-                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer) ) player.reset();
+                    if (
+                        (posX <= posXPlayer && posXPlayer <= (posX + 15)) ||
+                        (   (posX <= posXPlayer && posXPlayer <= (posX + 15)) && 
+                            (posY <= player.getY() && (posY + 3) >= posYPlayer)
+                        )) {
+                        player.reset();
+                    }
                 }
+
                 for (int i = 0; i < coleccion_boa.size(); i++) {
                     coleccion_boa[i]->creaBoa();
+                    if (!coleccion_boa[i]->dibujar) continue;
                     int posX = coleccion_boa[i]->getX();
                     int posY = coleccion_boa[i]->getY();
-                    if ((posX <= posXPlayer && (posX - 5) <= posXPlayer) || (posY <= player.getY() && (posY - 2) <= posYPlayer)) player.reset();
+                    if (
+                        (posX <= posXPlayer && posXPlayer <= (posX + 6)) ||
+                        (   (posX <= posXPlayer && posXPlayer <= (posX + 6) && 
+                            (posY <= player.getY() && (posY + 2) >= posYPlayer)
+                            ))
+                        ) {
+                        player.reset();
+                    }
                 }
                 for (int i = 0; i < coleccion_tiburon.size(); i++) {
                     coleccion_tiburon[i]->pintaTiburon();
@@ -115,7 +139,7 @@ public:
                 
                 cout << player;
             }
-            _sleep(100);
+            _sleep(40);
         }
     }
 };

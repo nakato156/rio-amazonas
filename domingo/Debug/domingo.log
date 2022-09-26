@@ -1,12 +1,12 @@
 ﻿  animales.cpp
   main.cpp
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(100,35): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(106,35): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(112,35): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(77,17): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(78,30): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(121,13): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
-C:\Users\aaron\source\repos\domingo\domingo\main.cpp(127,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(108,35): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(122,35): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(136,35): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(85,17): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(86,30): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(142,13): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+C:\Users\aaron\source\repos\domingo\domingo\main.cpp(148,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
   Generando código...
   animales.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   domingo.vcxproj -> C:\Users\aaron\source\repos\domingo\Debug\domingo.exe

@@ -1,35 +1,40 @@
 #include "pch.h"
 #include <iostream>
 #include <time.h>
-#include <conio.h>
-
-#define LIMITE 98
 
 using namespace std;
 using namespace System;
 
 class Amazonas {
 protected:
-    int x, y;
-    int velocidad;
+    int x;
+    int y;
+    int dx;
+    int dy;
+    int ax;
+    int ay;
+    int posicionX = 0, posicionY = 0;
     int avanza = 1 ? rand() % 2 : -1;
-    
 public:
     int getX() {
         return x;
     }
-
     int getY() {
         return y;
     }
-
+    Amazonas() {}
+    ~Amazonas() {}
 
 };
 
 class Cocodrilo : public Amazonas {
 public:
+    bool dibujar = true;
     Cocodrilo() {
-        velocidad = 1 + rand() % 8; // tamanio salto horizontal
+        ax = 0;
+        ay = 0;
+        dx = 1 + rand() % 8; // tamanio salto horizontal
+        dy = 1 + rand() % 2; // tamanio salto vertical
         x = 1;
         y = 2 + rand() % 20;
     }
@@ -46,6 +51,7 @@ public:
     }
     void borraCocodrilo()
     {
+        dibujar = false;
         Console::SetCursorPosition(x, y);
         cout << "        ";
         Console::SetCursorPosition(x, y + 1);
@@ -54,8 +60,13 @@ public:
         cout << "         ";
     }
     void saltoHorizontalCocodrilo() {
-        if (x + velocidad < 0 || x + velocidad > LIMITE) return;
-        x += velocidad;
+        if (x + dx < 0 || x + dx + ax > 100) {
+            dx *= -1;
+        }
+        if (x > 95) {
+            return;
+        }
+        x += dx;
     }
     void eliminaCocodrilo()
     {
@@ -76,7 +87,10 @@ public:
 class Boa : public Amazonas {
 public:
     Boa() {
-        velocidad = 1 + rand() % 8; // tamanio salto horizontal
+        ax = 0;
+        ay = 0;
+        dx = 1 + rand() % 8; // tamanio salto horizontal
+        dy = 1 + rand() % 2; // tamanio salto vertical
         x = 99;
         y = 2 + rand() % 20;
     }
@@ -103,15 +117,19 @@ public:
         cout << "             ";
     }
     void saltoHorizontalBoa() {
-        if (x + velocidad <= 3 || x + velocidad > LIMITE) {
-            dibujar = false;
-            return borraBoa();
+        if (x + dx < 0 || x + dx + ax > 98) {
+
+            dx *= -1;
         }
-        x += velocidad;
+        if (x <= 2) {
+            dibujar = false;
+            borraBoa();
+        }
+        x += dx;
     }
     void eliminarBoa()
     {
-        if (x <= 3) {
+        if (x <= 2) {
             borraBoa();
         }
     }
@@ -126,13 +144,19 @@ public:
 class Tiburon : public Amazonas {
 public:
     Tiburon() {
-        velocidad = 1 + rand() % 8; // tamanio salto horizontal
+        ax = 0;
+        ay = 0;
+        dx = 1 + rand() % 8; // tamanio salto horizontal
+        dy = 1 + rand() % 2; // tamanio salto vertical
         int opcion = 1 + rand() % 2;
-        
-        x = opcion ? 90 : 1;
-        if (opcion == 90) velocidad = -1 * velocidad;
+        if (opcion == 0) {
+            x = 1;
+        }
+        if (opcion == 1) {
+            x = 90;
+            dx = -dx;
+        }
         y = 2 + rand() % 20;
-
     }
     bool dibujar = true;
     void pintaTiburon() {
@@ -154,15 +178,18 @@ public:
         cout << "                ";
     }
     void saltoHorizontalTiburon() {
-        if (x +  velocidad < 0 || x + velocidad > LIMITE) {
+        if (x + dx < 0 || x + dx + ax > 100) {
             dibujar = false;
             return borraTiburon();
         }
-        x += velocidad;
+        x += dx;
     }
     void eliminaTiburon()
     {
-        if (x < 5 || x > LIMITE) {
+        if (x > 100) {
+            borraTiburon();
+        }
+        if (x < 3) {
             borraTiburon();
         }
     }
@@ -173,38 +200,4 @@ public:
         pintaTiburon();
         eliminaTiburon();
     }
-};
-
-template <typename T>
-class Arreglo {
-public:
-    int length = 0;
-    T** arreglo = new T * [1];
-
-    void append(T* elemento) {
-        if (length == 0) arreglo[0] = elemento;
-        else {
-            T** nuevo_arr = new T * [length + 1];
-            for (int i = 0; i < length; i++) nuevo_arr[i] = arreglo[i];
-            nuevo_arr[length + 1] = elemento;
-            arreglo = nuevo_arr;
-        }
-        length++;
-    }
-
-    void pop() {
-        T** nuevo_arr = new T * [length - 1];
-        for (int i = 0; i < length - 1; i++) nuevo_arr[i] = arreglo[i];
-        arreglo = nuevo_arr;
-    }
-
-    void remove(int pos = 0) {
-        T** nuevo_arr = new T * [length - 1];
-        for (int i = 0; i < length - 1; i++) {
-            if (i == pos) continue;
-            nuevo_arr[i] = arreglo[i];
-        }
-        arreglo = nuevo_arr;
-    }
-    T* operator [](unsigned int index) { return arreglo[index]; }
 };
