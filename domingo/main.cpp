@@ -1,14 +1,7 @@
 ﻿#include "pch.h"
 #include "animales.cpp"
-/*
-#include "Boa.h"
-#include "Cocodrilo.h"
-#include "Tiburon.h"
-*/
-#include <iostream>
 #include <conio.h>
-#include <thread>
-#include <vector>
+#include <time.h>
 
 #define WIDTH_CONSOLE 100
 #define HEIGHT_CONSOLE 24
@@ -53,6 +46,7 @@ public:
         cout << "Ha terminado el juego";
         exit(EXIT_SUCCESS);
     }
+
     friend ostream& operator<<(ostream& os, const Nadador& obj) {
         Console::SetCursorPosition(obj.posicionX, obj.posicionY);
         Console::ForegroundColor = ConsoleColor(obj.color);
@@ -74,9 +68,7 @@ public:
         Boa* boa = new Boa();
         Tiburon* tiburon = new Tiburon();
 
-        vector <Cocodrilo*> coleccion_cocodrilo;
-        vector <Boa*> coleccion_boa;
-        vector <Tiburon*> coleccion_tiburon;
+        vector <Animales*> coleccion_animales;
 
         int posXPlayer, posYPlayer;
 
@@ -91,55 +83,25 @@ public:
                 else if (tecla == ABAJO) player.mover(0, 1);
                 
                 // creacion de animales
-                else if (tecla == 't') {
-                    coleccion_tiburon.push_back(new Tiburon());
-                }
-                else if (tecla == 'c') {
-                    coleccion_cocodrilo.push_back(new Cocodrilo());
-                }
-                else if (tecla == 'b') {
-                    coleccion_boa.push_back(new Boa());
-                }
+                else if (tecla == 't') coleccion_animales.push_back(new Tiburon());
+                else if (tecla == 'c') coleccion_animales.push_back(new Cocodrilo());
+                else if (tecla == 'b') coleccion_animales.push_back(new Boa());
 
-                posXPlayer = player.getX();
-                posYPlayer = player.getY();
-
-                // verificando colisiones
-                for (int i = 0; i < coleccion_cocodrilo.size(); i++) {
-                    coleccion_cocodrilo[i]->crearCocodrilo();
-                    if (!coleccion_cocodrilo[i]->dibujar) continue;
-                    int posX = coleccion_cocodrilo[i]->getX();
-                    int posY = coleccion_cocodrilo[i]->getY();
-                    if (
-                        (posX <= posXPlayer && posXPlayer <= (posX + 15)) ||
-                        (   (posX <= posXPlayer && posXPlayer <= (posX + 15)) && 
-                            (posY <= player.getY() && (posY + 3) >= posYPlayer)
-                        )) {
-                        player.reset();
-                    }
-                }
-
-                for (int i = 0; i < coleccion_boa.size(); i++) {
-                    coleccion_boa[i]->creaBoa();
-                    if (!coleccion_boa[i]->dibujar) continue;
-                    int posX = coleccion_boa[i]->getX();
-                    int posY = coleccion_boa[i]->getY();
-                    if (
-                        (posX <= posXPlayer && posXPlayer <= (posX + 6)) ||
-                        (   (posX <= posXPlayer && posXPlayer <= (posX + 6) && 
-                            (posY <= player.getY() && (posY + 2) >= posYPlayer)
-                            ))
-                        ) {
-                        player.reset();
-                    }
-                }
-                for (int i = 0; i < coleccion_tiburon.size(); i++) {
-                    coleccion_tiburon[i]->pintaTiburon();
-                }
-                
                 cout << player;
             }
-            _sleep(40);
+
+            posXPlayer = player.getX();
+            posYPlayer = player.getY();
+
+            for (int i = 0; i < coleccion_animales.size(); i++) {
+                coleccion_animales[i]->mover();
+                if (!coleccion_animales[i]->esVisible()) continue;
+                if (!coleccion_animales[i]->esPeligroso()) continue;
+
+                // verificando colisiones
+                if (coleccion_animales[i]->checkColision(posXPlayer, posYPlayer)) { player.reset(); }
+            }
+            _sleep(60);
         }
     }
 };
@@ -147,7 +109,7 @@ public:
 int main() {
     srand(time(NULL));
     Console::SetWindowSize(WIDTH_CONSOLE, HEIGHT_CONSOLE);
-    Console::CursorVisible = 0;
+    Console::CursorVisible = false;
     
     Game juego;
     juego.init();
